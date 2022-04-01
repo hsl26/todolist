@@ -7,26 +7,10 @@ import TodoHeader from './components/TodoHeader';
 import TodoButton from './components/TodoButton';
 import TodoList from './components/TodoList';
 
-
-
 function App() {
   const [ value, setValue ] = useState("")
-  const [ todos, setTodos ] = useState([  
-    {
-      uuid: 0,
-      text: '해야할 일 A',
-      isCompleted: true,
-      isDeleted: true,
-    },
-    {
-      uuid: 1,
-      text: '해야할 일 B',
-      isCompleted: false,
-      isDeleted: false,
-    }
-  ]) 
-
-  const [ count, setCount ] = useState(2)
+  const [ todos, setTodos ] = useState([ ])
+  const [ count, setCount ] = useState(0)
 
   const onChangeHandler = event => {
     console.log(event.target.value)
@@ -36,9 +20,8 @@ function App() {
   const onClickHandler = event => {
     const computedValue = value.trim()
     if (computedValue === '') {
-      alert('공백은 입력할 수 없습니다')
       return 
-    }
+    } 
 
     setTodos(prev => {
       return [
@@ -48,6 +31,7 @@ function App() {
           text: value,
           isCompleted: false,
           isDeleted: false,
+          isDisabled: true
         }
       ]
     }) 
@@ -64,12 +48,11 @@ function App() {
           <TodoHeader/>
           <div className='input-area'>
             <TodoInput value={value} onChangeHandler={onChangeHandler}></TodoInput>
-            <TodoButton onClickHandler={onClickHandler}>
+            <TodoButton value={value} onClickHandler={onClickHandler} disabled={value.trim() === ''}>
               추가하기
             </TodoButton>
           </div>
-
-          <TodoList todos={todos}/>
+          <TodoList todos={todos} setTodos={setTodos}/>
         </div>
       </div>
     </AppStyle>

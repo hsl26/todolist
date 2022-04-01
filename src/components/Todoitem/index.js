@@ -1,54 +1,31 @@
 import styled from 'styled-components'
-// import State from './right'
-import React, { useState } from "react";
+// import React, { useState } from "react";
 
+const TodoItem = props => {
 
-const TodoItem = ({onClick, todo}) => {
-    const [p, setP] = useState(true);
-    const [dor, setDor] = useState( "삭제" );
-    const [color, setColor] = useState( true );
-    const [tcolor, seTcolor] = useState( 0 );
-    const [checked, setChecked] = useState (false);
-
-    const Restore = () => {
-        if( dor === "삭제" ) {
-            setDor( "복구" );
-            setColor(false);
-            seTcolor(2);
-            setP(false)
-            // 체크 원 삭제
-        } else {
-            setDor( "삭제" );
-            setColor(true);
-            seTcolor(0);
-            setP(true)
-        }
-    };
-
-    const Checked = () => {
-        if (checked === false) {
-            setChecked( true );
-            seTcolor(1);
-        } else {
-            setChecked( false );
-            seTcolor(0);
-        }
+    const deleteToggle = () => {
+        props.deleteHandler(props.uuid, props.isDeleted)
+        console.log(props.isDeleted)
     }
 
+    const completeToggle = () => {
+        props.completeHandler(props.uuid, props.isCompleted)
+        console.log(props.isCompleted)
+    }
 
-    return <Style >
-        <div className='left'>
-            {p && <div className = 'check' onClick = { Checked } >
+    return <Style isCompleted={props.isCompleted} isDeleted={props.isDeleted} >
+        <div className='left' >
+            { !props.isDeleted && <div className = 'check' onClick = { completeToggle } >
                 <div className='circle'>
-                    { checked && <div className='f_circle' /> }
+                    { props.isCompleted && <div className='f_circle' />}
                 </div>
             </div>}
-            <div className={tcolor===0 ? 'text' : (tcolor===1 ? 'text_f' : 'text_d')}>
-                {todo.text}
+            <div className='text'>
+                {props.text}
             </div>
         </div>
-        <div className={ color ? 'right' : 'right_2' } onClick={ Restore } >
-            {dor}
+        <div className='right' onClick={ deleteToggle } >
+            {props.isDeleted ? '복구' : '삭제'}
         </div>
     </Style>
 }
@@ -79,28 +56,16 @@ const Style = styled.div`
         }
         
         .text {
-            margin-left: 16px;
-        }
-        .text_f {
-            margin-left: 16px;
-            color: rgba(0, 0, 0, 0.4);
-        }
-        .text_d {
-            margin-left: 48px;
-            color: rgba(0, 0, 0, 0.4);
-            text-decoration: line-through; /* text 가로 선 */
+            margin-left: ${ ({isDeleted}) => isDeleted ? 48 : 16}px;
+            color: ${ ({isCompleted, isDeleted}) => (isDeleted || isCompleted) ? '#00000040' : '#000000' };
+            text-decoration: ${ ({isDeleted}) => isDeleted ? 'line-through' : 'none' };
         }
     }
     
     .right {
         margin-right: 12px;
         font-size: 14px;
-        color: #FF0000;
-    }
-    .right_2 {
-        margin-right: 12px;
-        font-size: 14px;
-        color: #0000FF;
+        color: ${ ({isDeleted}) => isDeleted ? '#0000FF':'#FF0000'};
     }
 `
 
