@@ -1,32 +1,28 @@
 import styled from 'styled-components'
-// import React, { useState } from "react";
 
 const TodoItem = props => {
 
     const deleteToggle = () => {
-        props.deleteHandler(props.uuid, props.isDeleted)
-        console.log(props.isDeleted)
+        props.deleteHandler(props._id)
     }
 
     const completeToggle = () => {
-        props.completeHandler(props.uuid, props.isCompleted)
-        console.log(props.isCompleted)
+        props.completeHandler(props._id, props.completed)
     }
 
-    return <Style isCompleted={props.isCompleted} isDeleted={props.isDeleted} >
+    return <Style completed={props.completed}>
         <div className='left' >
-            { !props.isDeleted && <div className = 'check' onClick = { completeToggle } >
+            <div className = 'check' onClick = { completeToggle } >
                 <div className='circle'>
-                    { props.isCompleted && <div className='f_circle' />}
+                    { props.completed && <div className='f_circle' />}
                 </div>
-            </div>}
+            </div>
             <div className='text'>
-                {props.text}
+                {props.description}
             </div>
         </div>
-        <div className='right' onClick={ deleteToggle } >
-            {props.isDeleted ? '복구' : '삭제'}
-        </div>
+        <div className='right' onClick={ deleteToggle }>삭제</div>
+        
     </Style>
 }
 
@@ -44,28 +40,27 @@ const Style = styled.div`
             height: 20px;
             box-sizing: border-box; 
             border: 1px solid rgba(0,0,0,0.2);
-            border-radius: 20px;
+            border-radius: 50%;
             margin-left: 12px;
             .f_circle {
                 width: 14px;
                 height: 14px;
+                border: none;
                 background-color: #426EFF;
-                border-radius: 16px;
+                border-radius: 50%;
                 margin: 2px;
             }
         }
-        
         .text {
-            margin-left: ${ ({isDeleted}) => isDeleted ? 48 : 16}px;
-            color: ${ ({isCompleted, isDeleted}) => (isDeleted || isCompleted) ? '#00000040' : '#000000' };
-            text-decoration: ${ ({isDeleted}) => isDeleted ? 'line-through' : 'none' };
+            margin-left: 16px;
+            color: ${ ({completed}) => (completed) ? '#00000040' : '#000000' };
         }
     }
     
     .right {
         margin-right: 12px;
         font-size: 14px;
-        color: ${ ({isDeleted}) => isDeleted ? '#0000FF':'#FF0000'};
+        color: #FF0000;
     }
 `
 
