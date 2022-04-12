@@ -34,6 +34,15 @@ const user = {
         setToken(result.data.token)
         destroyToken()
         return result
+    },
+    withdraw: async () => {
+        const result = await axios.delete('https://api-nodejs-todolist.herokuapp.com/user/me', {
+            headers: {
+                Authorization: getToken(),
+            }
+        })
+        setToken(result.data.token)
+        return result
     }
 }
 export default user
