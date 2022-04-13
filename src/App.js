@@ -15,8 +15,8 @@ function App() {
   const [ password, setPassword ] = useState('')
   const [ age, setAge ] = useState('')
 
-  const [ email2, setEmail2 ] = useState('')
-  const [ password2, setPassword2 ] = useState('')
+  const [ email2, setEmail2 ] = useState('gustn26@gmail.com')
+  const [ password2, setPassword2 ] = useState('1234567')
 
   const [ user, setUser ] = useState(null)
   const isLogin = user ? true : false
@@ -53,14 +53,6 @@ function App() {
     }
   }
 
-  const register = () => {
-    setRegistered(!registered)
-    setName('')
-    setEmail('')
-    setPassword('')
-    setAge('')
-  }
-
   const logoutHandler = async () => {
     const result = await service.user.logout()
     setUser(!result)
@@ -70,6 +62,14 @@ function App() {
     const result = await service.user.withdraw()
     alert('회원 탈퇴가 완료되었습니다.')
     setUser(!result)
+  }
+
+  const register = () => {
+    setRegistered(!registered)
+    setName('')
+    setEmail('')
+    setPassword('')
+    setAge('')
   }
 
   const fetchAllTasks = async () => {
@@ -98,21 +98,11 @@ function App() {
     setValue('') 
   }
 
-  const loginPress = (e) => { // 로그인 엔터
+  const onKeyPress = (e, temp) => { 
     if(e.key === 'Enter') {
-      loginHandler()
-    }
-  }
-
-  const addPress = (e) => { // todo 추가 엔터
-    if(e.key === 'Enter') {
-      onClickHandler()
-    }
-  }
-
-  const signupPress = (e) => { // 회원가입 엔터
-    if(e.key === 'Enter') {
-      signupHandler()
+      if(temp==='login') loginHandler()
+      else if(temp==='add') onClickHandler()
+      else if(temp==='signup') signupHandler()
     }
   }
 
@@ -124,14 +114,14 @@ function App() {
             <div className='inner-wrapper'>
               <TodoHeader/>
               <div className='input-area'>
-                <TodoInput placeholder="할 일을 입력하세요" value={value} onChangeHandler={onChangeHandler} onKeyPress={addPress} ></TodoInput>
+                <TodoInput placeholder="할 일을 입력하세요" value={value} onChangeHandler={onChangeHandler} onKeyPress={e=>onKeyPress(e, 'add')} ></TodoInput>
                 <TodoButton onClickHandler={onClickHandler} disabled={value.trim() === ''}>추가하기</TodoButton>
               </div>
               <TodoList todos={todos} setTodos={setTodos}/>
               <br/>
-              <TodoButton onClickHandler={logoutHandler}>로그아웃</TodoButton>
+              <TodoButton className="gotologout"onClickHandler={logoutHandler}>로그아웃</TodoButton>
             </div>
-              <p className="gotowithdraw" onClick={withdrawHandler}>회원탈퇴</p>
+            <p className="gotowithdraw" onClick={withdrawHandler}>회원탈퇴</p>
           </div>
         :
         !isregister ? 
@@ -145,7 +135,7 @@ function App() {
                         type='password'
                         onChangeHandler={e=>{setPassword2(e.target.value)}}
                         placeholder="비밀번호를 입력해주세요" 
-                        onKeyPress={loginPress} />        
+                        onKeyPress={e=>onKeyPress(e, 'login')} />        
             <div>
               <TodoButton onClickHandler={loginHandler} disabled={ email2.trim() === '' || password2.trim() === '' } >로그인</TodoButton>
               &nbsp;&nbsp;
@@ -171,12 +161,12 @@ function App() {
                         type='text'
                         onChangeHandler={e=>{setAge(e.target.value)}}
                         placeholder="나이을 입력해주세요" 
-                        onKeyPress={signupPress} />    
+                        onKeyPress={e=>onKeyPress(e, 'signup')} />    
             <TodoButton onClickHandler={signupHandler} disabled={name.trim() === ''||email.trim() === ''||password.trim() === ''||age.trim() === ''} >회원가입</TodoButton>
             <p className="gotologin" onClick={register}>로그인페이지로이동</p>
           </div>
-      }
-                         
+      }         
+
     </AppStyle>
   );
 }
@@ -201,11 +191,13 @@ const AppStyle = styled.div`
       }
     }
     .gotowithdraw {
-        font-size:10px;
-        text-decoration: underline;
-        position: absolute;
-        bottom: 10px;
-      }
+      font-size:10px;
+      color:white;
+      text-decoration: underline;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
   }
   .wrapper2 {
     width: 768px;
