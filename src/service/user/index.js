@@ -1,6 +1,7 @@
 import axios from "axios"
 import { destroyToken, getToken, setToken } from "../../utils"
 
+
 const user = {
     signup: async ({ name, email, password, age }) => {
         const result = await axios.post('https://api-nodejs-todolist.herokuapp.com/user/register', {
@@ -31,7 +32,6 @@ const user = {
                 Authorization: getToken(),
             }
         })
-        setToken(result.data.token)
         destroyToken()
         return result
     },
@@ -43,6 +43,14 @@ const user = {
         })
         setToken(result.data.token)
         return result
+    },
+    logged: async () => {
+        const result = await axios.get('https://api-nodejs-todolist.herokuapp.com/user/me', { // me api는 settoken 안함.
+            headers: {
+                Authorization: getToken(),
+            }
+        })
+        return result.data
     }
 }
 export default user

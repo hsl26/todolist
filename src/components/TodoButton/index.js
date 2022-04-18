@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 
 const TodoButton = ({ onClickHandler, children, disabled }) => {
-    
     return <ButtonStyle className="btn-submit" onClick={onClickHandler} disabled={disabled}>
         { children }
     </ButtonStyle>
